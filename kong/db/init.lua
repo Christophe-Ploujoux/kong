@@ -158,7 +158,15 @@ function DB:reset()
 end
 
 
-function DB:truncate()
+function DB:truncate(table_name)
+  if table_name ~= nil and type(table_name) ~= "string" then
+    error("table_name must be a string", 2)
+  end
+
+  if table_name then
+    return self.connector:truncate_table(table_name)
+  end
+
   local ok, err = self.connector:truncate()
   if not ok then
     return nil, prefix_err(self, err)
